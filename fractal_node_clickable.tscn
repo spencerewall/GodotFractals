@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cx4lmeum05cel"]
 
-[ext_resource type="Script" path="res://FractalNode.cs" id="1_fwjan"]
-[ext_resource type="Texture2D" uid="uid://b6shfm74unfrn" path="res://icon.svg" id="2_wx2gr"]
+[ext_resource type="Script" path="res://FractalNode.cs" id="1_3cx14"]
+[ext_resource type="Texture2D" uid="uid://b6shfm74unfrn" path="res://icon.svg" id="2_sv8nk"]
 
 [node name="FractalNode" type="Node2D"]
-script = ExtResource("1_fwjan")
+script = ExtResource("1_3cx14")
 
 [node name="TextureButton" type="TextureButton" parent="."]
 anchors_preset = 8
@@ -18,6 +18,6 @@ offset_right = 64.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("2_wx2gr")
+texture_normal = ExtResource("2_sv8nk")
 
 [connection signal="pressed" from="TextureButton" to="." method="_Pressed"]

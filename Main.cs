@@ -1,30 +1,46 @@
 using Godot;
+using Godot.Collections;
 using System;
 
 public partial class Main : Control
 {
 	private Color _circleColor = new Color(0, 1, 0); // Green color
     private float _circleRadius = 50f; // Radius of the circle
+    private RandomNumberGenerator _random;
     private PackedScene _fractalNodeFactory;
+
+    [Export]
+    private Control _StartMenu;
+
     public override void _Ready()
     {
-        _fractalNodeFactory = GD.Load<PackedScene>("res://fractal_node.tscn");
-		// draw the first one in the middle of the screen
-		Vector2 screenSize = GetViewportRect().Size;
+        _random = new RandomNumberGenerator();
+        _StartMenu.Visible = true;
+    }
+
+    /**
+     * This method is meant to be called from a button signal on the on the mainscreen, with parameters for which node type to use.
+     */
+    public void _OnStart(string nodeFactory) {
+        GD.Print("nodeFactory", nodeFactory);
+        _fractalNodeFactory = GD.Load<PackedScene>(nodeFactory);
+        _StartMenu.Visible = false;
+
+        Vector2 screenSize = GetViewportRect().Size;
 		
         FractalNode centerNode = _fractalNodeFactory.Instantiate() as FractalNode;
         centerNode.Position = screenSize / 2;
         this.AddChild(centerNode);
 
         GD.Print(centerNode.Position);
-        Action centerClickHandler = BuildClickHandler(centerNode.Position, new Vector2(0,0), screenSize, centerNode.Scale * .75f, true);
+        Action centerClickHandler = GenerateNextItemHandler(centerNode.Position, new Vector2(0,0), screenSize, centerNode.Scale * .75f, true);
         centerNode.Pressed += centerClickHandler.Invoke;
     }
 
     // every time a node is clicked, this method will be called on it
     // todo: first instance
     // todo: fix for every other instance
-    private Action BuildClickHandler(Vector2 position, Vector2 minPosition, Vector2 maxPosition, Vector2 scale, bool growHorizontal) {
+    private Action GenerateNextItemHandler(Vector2 position, Vector2 minPosition, Vector2 maxPosition, Vector2 scale, bool growHorizontal) {
         float growVal = growHorizontal ? position.X : position.Y;
         float growMin = growHorizontal ? minPosition.X : minPosition.Y;
         float growMax = growHorizontal ? maxPosition.X : maxPosition.Y;
@@ -72,8 +88,8 @@ public partial class Main : Control
                 rightMax = maxPosition;
             }
 
-            Action leftClickHandler = BuildClickHandler(leftPosition, leftMin, leftMax, scale * .75f, newGrowDirection);
-            Action rightClickHandler = BuildClickHandler(rightPosition, rightMin, rightMax, scale * .75f, newGrowDirection);
+            Action leftClickHandler = GenerateNextItemHandler(leftPosition, leftMin, leftMax, scale * .75f, newGrowDirection);
+            Action rightClickHandler = GenerateNextItemHandler(rightPosition, rightMin, rightMax, scale * .75f, newGrowDirection);
             leftInstance.Pressed += leftClickHandler.Invoke;
             rightInstance.Pressed += rightClickHandler.Invoke;
         };

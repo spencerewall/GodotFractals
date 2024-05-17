@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Main.cs" id="1_h876f"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" node_paths=PackedStringArray("_StartMenu")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h876f")
+_StartMenu = NodePath("MainMenuContainer")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -19,3 +20,51 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="MainMenuContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HFlowContainer" type="HFlowContainer" parent="MainMenuContainer/CenterContainer"]
+layout_mode = 2
+
+[node name="StartFractClickableContainer" type="MarginContainer" parent="MainMenuContainer/CenterContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="StartFractClickButton" type="Button" parent="MainMenuContainer/CenterContainer/HFlowContainer/StartFractClickableContainer"]
+layout_mode = 2
+text = "Start Clickable"
+
+[node name="StartFractTimedContainer" type="MarginContainer" parent="MainMenuContainer/CenterContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="StartFractTimedButton" type="Button" parent="MainMenuContainer/CenterContainer/HFlowContainer/StartFractTimedContainer"]
+layout_mode = 2
+text = "Start Timed"
+
+[connection signal="pressed" from="MainMenuContainer/CenterContainer/HFlowContainer/StartFractClickableContainer/StartFractClickButton" to="." method="_OnStart" binds= ["res://fractal_node_clickable.tscn"]]
+[connection signal="pressed" from="MainMenuContainer/CenterContainer/HFlowContainer/StartFractTimedContainer/StartFractTimedButton" to="." method="_OnStart" binds= ["res://fractal_node_timed.tscn"]]
